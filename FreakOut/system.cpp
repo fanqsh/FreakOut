@@ -8,11 +8,11 @@ SystemClass::SystemClass(void)
 	m_game = NULL;
 }
 
-SystemClass::SystemClass(const SystemClass&)
+SystemClass::~SystemClass(void)
 {
 }
 
-SystemClass::~SystemClass(void)
+SystemClass::SystemClass(const SystemClass&)
 {
 }
 
