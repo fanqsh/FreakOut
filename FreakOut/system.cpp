@@ -1,5 +1,6 @@
 #include "system.h"
 
+
 SystemClass::SystemClass(void)
 {
 	bexit = false;
@@ -8,13 +9,15 @@ SystemClass::SystemClass(void)
 	m_game = NULL;
 }
 
+SystemClass::SystemClass(const SystemClass&)
+{
+}
+
 SystemClass::~SystemClass(void)
 {
 }
 
-SystemClass::SystemClass(const SystemClass&)
-{
-}
+
 
 //调用串口初始化函数和其它一些类的初始化函数
 //本例子中只调用初始化窗口函数
