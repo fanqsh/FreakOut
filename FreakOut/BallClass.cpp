@@ -30,6 +30,14 @@ void BallClass::GetForwardPosition(Vector2& position)
 	return;
 }
 
+void BallClass::GetForwardCenter(Vector2& position)
+{
+	position.x = m_position.x + (m_ballSize / 2);
+	position.y = m_position.y + (m_ballSize / 2);
+
+	return;
+}
+
 Vector2 BallClass::GetPosition(Vector2& position)
 {
 	position = m_position;

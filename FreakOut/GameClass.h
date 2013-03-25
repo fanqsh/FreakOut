@@ -24,6 +24,8 @@ private:
 	bool IsInRect(Vector2& rectLeftTop, Vector2& rectRightBottom, Vector2& leftTop, Vector2& rightBottom);
 	void Init_Block(HDC hdc);
 
+	bool IsHitInLevel(Vector2& position, Vector2& speed, Vector2& blockLeftTop);
+
 	float m_spacingTime;
 	BallClass* m_ball;
 	HDC m_hdc;

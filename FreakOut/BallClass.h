@@ -33,6 +33,7 @@ public:
 
 	Vector2 GetPosition(Vector2& position);
 	void GetForwardPosition(Vector2& position);
+	void GetForwardCenter(Vector2& position);
 	void SetBallColor(COLORREF);
 	void SetPosition(Vector2& position);
 	void AddHitPosition(Vector2& hitPosition);
