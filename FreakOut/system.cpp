@@ -120,10 +120,14 @@ bool SystemClass::Frame()
 		return false;
 
 	m_timer->Frame();
-	result = m_game->Frame(m_hdc, m_timer->GetTime());
-
-	if (!result)
-		return false;
+	if (m_game->m_state == GameClass::GameState::Game_Run)
+	{
+		result = m_game->Frame(m_hdc, m_timer->GetTime());
+		if (!result)
+			return false;
+	}
+	else
+		return true;
 
 	return true;
 }
@@ -167,8 +171,8 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
 	//窗口模式 ： 800*600
-	screenWidth = 800;
-	screenHeight = 600;
+	screenWidth = 700;
+	screenHeight = 700;
 
 	posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
 	posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
@@ -212,6 +216,12 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umessage, WPARAM wp
 	case WM_KEYDOWN:
 		if (wparam == VK_ESCAPE)
 			bexit = true;
+		if (wparam == VK_LEFT)
+			m_game->m_moveDir.x -= 8;
+		if (wparam == VK_RIGHT)
+			m_game->m_moveDir.x += 8;
+		if (wparam == VK_SPACE)
+			m_game->m_state = GameClass::GameState::Game_Run;
 		return 0;
 
 	case WM_KEYUP:
@@ -243,7 +253,7 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umessage, WPARAM wp
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {
-	PAINTSTRUCT ps;        // 指向图形环境的句柄 WM_PAINT事件中使用 
+	PAINTSTRUCT ps;        // 指向图形环境的句柄 WM_PAINT事件中使用
 	switch (umessage)
 	{
 	case WM_PAINT: //窗口内容需要重画时调用 

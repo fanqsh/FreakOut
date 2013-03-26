@@ -1,6 +1,9 @@
 #pragma once
-
+#ifndef _TIMERCLASS_H_
+#define _TIMERCLASS_H_
 #include <windows.h>
+#include <string>
+#include <stdio.h>
 
 class TimerClass 
 {
@@ -13,6 +16,7 @@ public:
 	void Frame();
 
 	float GetTime();
+	static void GetSystemTime(char* time, char* date = nullptr);
 
 private:
 	INT64 m_frequency;
@@ -20,3 +24,5 @@ private:
 	INT64 m_startTime;
 	float m_frameTime;
 };
+
+#endif

@@ -61,16 +61,6 @@ void BallClass::GoForward(int steps)
 	m_position.y += m_speed.y * steps;
 }
 
-void BallClass::AddHitPosition(Vector2& hitPosition)
-{
-	m_hitPosition.push_back(hitPosition);
-}
-
-void BallClass::ResetHitPosition()
-{
-	m_hitPosition.clear();
-}
-
 void BallClass::HasHit(EHitType type)
 {
 	switch (type)
@@ -90,30 +80,4 @@ void BallClass::HasHit(EHitType type)
 	default:
 		break;
 	}
-}
-
-Vector2::~Vector2()
-{
-}
-
-Vector2::Vector2(void)
-{
-	x = 0;
-	y = 0;
-}
-
-Vector2::Vector2(const Vector2&)
-{
-}
-
-Vector2::Vector2(int px, int py)
-{
-	x = px;
-	y = py;
-}
-
-void Vector2::Zero()
-{
-	x = 0;
-	y = 0;
 }

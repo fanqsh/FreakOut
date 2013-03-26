@@ -44,3 +44,17 @@ float TimerClass::GetTime()
 {
 	return m_frameTime;
 }
+
+void TimerClass::GetSystemTime(char* time, char* date /* = nullptr*/)
+{
+	SYSTEMTIME sys;
+
+	GetLocalTime(&sys);
+
+	if (time != nullptr)
+		sprintf(time, "%d:%d:%d", sys.wHour, sys.wMinute, sys.wSecond);
+	if (date != nullptr)
+		sprintf(date, "%d-%d-%d", sys.wYear, sys.wMonth, sys.wDay);
+
+	return;
+}

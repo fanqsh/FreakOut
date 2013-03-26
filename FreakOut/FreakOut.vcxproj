@@ -77,20 +77,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BallClass.cpp" />
+    <ClCompile Include="BottomBlock.cpp" />
     <ClCompile Include="GameClass.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="system.cpp" />
     <ClCompile Include="TimerClass.cpp" />
+    <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BallClass.h" />
+    <ClInclude Include="BottomBlock.h" />
     <ClInclude Include="BrickClass.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="GameClass.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="TimerClass.h" />
+    <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

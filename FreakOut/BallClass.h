@@ -1,17 +1,9 @@
-#pragma once
+//#pragma once
+#ifndef _BALLCLASS_H_
+#define _BALLCLASS_H_   
+
 #include <Windows.h>
-#include <list>
-#include "common.h"
-class Vector2
-{
-public:
-	int x, y;
-	Vector2(void);
-	Vector2(const Vector2&);
-	Vector2(int, int);
-	~Vector2();
-	void Zero();
-};
+#include "Vector2.h"
 
 class BallClass
 {
@@ -28,7 +20,7 @@ public:
 	BallClass(void);
 	BallClass(const BallClass&);
 	~BallClass(void);
-
+	
 	void Initialize(int size = 5, Vector2& position = Vector2(0.0f, 0.0f), Vector2& speed = Vector2(0.0f, 0.0f));
 
 	Vector2 GetPosition(Vector2& position);
@@ -49,6 +41,6 @@ private:
 
 	COLORREF m_color;
 	Vector2 m_position;
-	std::list<Vector2> m_hitPosition;
 };
 
+#endif

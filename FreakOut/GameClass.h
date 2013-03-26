@@ -1,10 +1,24 @@
-#pragma once
+#ifndef GAMECLASS_H   
+#define GAMECLASS_H   
+
 #include <Windows.h>
 #include "BallClass.h"
-#include "BrickClass.h"
+#include "BottomBlock.h"
+#include "log.h"
 
 class GameClass
 {
+public:
+	enum GameState
+	{
+		GameStateFirst = 10000,
+		Game_Initialize,
+		Game_Run,
+		Game_Pass,
+		Game_Over,
+		GameStateLast
+	};
+
 public:
 	GameClass();
 	GameClass(const GameClass&);
@@ -17,6 +31,12 @@ public:
 	void Draw_Rect(HDC hdc, int horizontalOffset, int verticalOffset, int width = 50, int height = 25, int i = 0);
 	void Draw_Ball(HDC hdc);
 	void Delete_Ball(HDC hdc);
+
+	void Draw_BottomBlock(HDC hdc);
+	void Delete_BottomBlock(HDC hdc);
+
+	GameState m_state;
+	Vector2 m_moveDir;	//底部砖块移动积累量
 private:
 	bool Render();
 	void CheckHit(Vector2&);
@@ -28,6 +48,7 @@ private:
 
 	float m_spacingTime;
 	BallClass* m_ball;
+	BottomBlock* m_bottomBlock;	
 	HDC m_hdc;
 
 	int m_screenHeight;
@@ -52,3 +73,5 @@ private:
 	int** m_blocks;
 };
 
+
+#endif

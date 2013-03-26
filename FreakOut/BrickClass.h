@@ -7,8 +7,6 @@ public:
 	BrickClass(const BrickClass&);
 	~BrickClass();
 
-
-
 private:
 	//Vector2 m_size;	
 };

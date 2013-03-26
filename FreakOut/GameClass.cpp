@@ -21,6 +21,9 @@ GameClass::GameClass()
 
 	m_spacingTime = 0.0f;
 	m_ball = NULL;
+	m_bottomBlock = NULL;
+	m_moveDir.Zero();
+	m_state = GameState::Game_Initialize;
 }
 
 GameClass::GameClass(const GameClass&)
@@ -37,12 +40,19 @@ bool GameClass::Initialize(int screenWidth, int screenHeight, HWND hwnd, HDC hdc
 	m_screenHeight = screenHeight;
 
 	m_ball = new BallClass;
-	Vector2 vec(400, 580);
-	Vector2 vec2(-1, -1);
 	if (!m_ball)
 		return false;
+
+	Vector2 vec(400, 580);
+	Vector2 vec2(-1, -1);
 	m_ball->Initialize(15, vec, vec2);
 
+	m_bottomBlock = new BottomBlock;
+	if (!m_bottomBlock)
+		return false;
+	vec2.setValue(100, 15);
+	vec.setValue(vec.x - (vec2.x - m_ball->m_ballSize)/2, vec.y + m_ball->m_ballSize);
+	m_bottomBlock->Initilaize(vec, vec2);
 }
 
 bool GameClass::Frame(HDC hdc, float spacingTime)
@@ -51,11 +61,20 @@ bool GameClass::Frame(HDC hdc, float spacingTime)
 	hitBlock.x = -5;
 	m_spacingTime += spacingTime;
 
+	Delete_BottomBlock(hdc);
+	m_bottomBlock->makeMove(m_moveDir);
+	m_moveDir.Zero();
+	Draw_BottomBlock(hdc);
+	
 	if (m_spacingTime > 20.0f)
 	{
 		CheckHit(hitBlock);
 		if ( -5 != hitBlock.x)
 		{
+			//char logTmp[20];
+			//sprintf(logTmp, "x = %d, y = %d", hitBlock.x, hitBlock.y);
+			//LOG(logTmp);
+
 			Draw_Rect(hdc, hitBlock.x  * (m_block_width + m_block_dx) + m_block_leftOffset + m_game_rect_leftOffset, 
 				hitBlock.y * (m_block_height + m_block_dy) + m_block_topOffset + m_game_rect_topOffset, 
 				m_block_width, m_block_height, 1);
@@ -64,9 +83,10 @@ bool GameClass::Frame(HDC hdc, float spacingTime)
 		Delete_Ball(hdc);
 		m_ball->GoForward(5);
 		Draw_Ball(hdc);
+
 		m_spacingTime = 0.0f;
 	}
-	
+
 	return true;
 }
 
@@ -115,6 +135,44 @@ void GameClass::Delete_Ball(HDC hdc)
 	DeleteObject(hbrush);
 }
 
+void GameClass::Draw_BottomBlock(HDC hdc)
+{
+	Vector2 position;
+	Vector2 size;
+	RECT rect;
+	m_bottomBlock->GetPosition(position);
+	m_bottomBlock->GetSize(size);
+
+	rect.top = position.y;
+	rect.left = position.x;
+	rect.bottom = position.y + size.y;
+	rect.right = position.x + size.x;
+
+	HBRUSH hbrush = CreateSolidBrush(RGB(rand()%255, rand()%255, rand()%255));
+
+	FillRect(hdc, &rect, hbrush);
+	DeleteObject(hbrush);
+}
+
+void GameClass::Delete_BottomBlock(HDC hdc)
+{
+	Vector2 position;
+	Vector2 size;
+	RECT rect;
+	m_bottomBlock->GetPosition(position);
+	m_bottomBlock->GetSize(size);
+
+	rect.top = position.y;
+	rect.left = position.x;
+	rect.bottom = position.y + size.y;
+	rect.right = position.x + size.x;
+
+	HBRUSH hbrush = CreateSolidBrush(RGB(0, 0, 0));
+
+	FillRect(hdc, &rect, hbrush);
+	DeleteObject(hbrush);
+}
+
 void GameClass::InitiSences(HDC hdc)
 {
 	RECT rect;
@@ -130,7 +188,7 @@ void GameClass::InitiSences(HDC hdc)
 	FrameRect(hdc, &rect, hbrush2);
 
 	Init_Block(hdc);
-
+	Draw_BottomBlock(hdc);	
 	m_blocks = new int*[m_block_rows];
 	for (int i = 0; i < m_block_rows; ++i)
 	{
@@ -172,23 +230,31 @@ void GameClass::CheckHit(Vector2& hitBlock)
 					
 					if (m_blocks[i][j] == 0 && IsInRect(vec, ballRightBottom, blockLeftTop, blockRightBottom) )
 					{
+						char logTmp[30];
 						if (m_ball->m_speed.x > 0 && !IsHitInLevel(ballCenter, m_ball->m_speed, blockLeftTop))
 						{
+							sprintf(logTmp, "x = %d, y = %d type = Left", j, i);
 							type = BallClass::EHitLeft;
 						}
 						else if (m_ball->m_speed.y > 0 && IsHitInLevel(ballCenter, m_ball->m_speed, blockLeftTop))
 						{
+							sprintf(logTmp, "x = %d, y = %d type = Top", j, i);
 							type = BallClass::EHitTop;
 						}
 						else if (m_ball->m_speed.x < 0 && !IsHitInLevel(ballCenter, m_ball->m_speed, blockLeftTop))
 						{
+							sprintf(logTmp, "x = %d, y = %d type = Right", j, i);
 							type = BallClass::EHitRight;
 						}
 
 						else if (m_ball->m_speed.y < 0 && IsHitInLevel(ballCenter, m_ball->m_speed, blockLeftTop))
 						{
+							sprintf(logTmp, "x = %d, y = %d type = Bottom", j, i);
 							type = BallClass::EHitBottom;
 						}
+
+						LOG(logTmp);
+
 						m_blocks[i][j] = 1;
 						hitBlock.x = j;
 						hitBlock.y = i;
@@ -205,10 +271,15 @@ void GameClass::CheckHit(Vector2& hitBlock)
 		type = BallClass::EHitRight;
 	else if (vec.y - m_ball->m_ballSize < m_game_rect_topOffset)
 		type = BallClass::EHitTop;
-	else if (vec.y + m_ball->m_ballSize > m_game_rect_topOffset + m_game_rect_height)
+	else if (m_bottomBlock->CheckHit(vec, m_ball->m_speed, m_ball->m_ballSize))
 		type = BallClass::EHitBottom;
 
 	m_ball->HasHit(type);
+
+
+	if (vec.y > m_game_rect_height)
+		m_state = GameState::Game_Over;
+
 	return;
 }
 
@@ -273,4 +344,3 @@ void GameClass::Init_Block(HDC hdc)
 		}
 	}
 }
-
