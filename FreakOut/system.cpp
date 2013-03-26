@@ -116,6 +116,7 @@ bool SystemClass::Frame()
 {
 	bool result = false;
 
+
 	if (bexit)
 		return false;
 
