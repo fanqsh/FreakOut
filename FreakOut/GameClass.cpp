@@ -175,6 +175,7 @@ void GameClass::Delete_BottomBlock(HDC hdc)
 
 void GameClass::InitiSences(HDC hdc)
 {
+
 	RECT rect;
 	rect.top = m_game_rect_topOffset;
 	rect.bottom = m_game_rect_topOffset + m_game_rect_height;
