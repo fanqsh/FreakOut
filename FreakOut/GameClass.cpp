@@ -2,24 +2,25 @@
 
 GameClass::GameClass()
 {
-	m_game_rect_width = 600;
-	m_game_rect_height = 600;
-	m_game_rect_leftOffset = 20;
-	m_game_rect_topOffset = 20;
+	//m_game_rect_width = 600;
+	//m_game_rect_height = 600;
+	//m_game_rect_leftOffset = 20;
+	//m_game_rect_topOffset = 20;
 
-	m_block_rows = 5;
-	m_block_columns = 10;
+	//m_block_rows = 5;
+	//m_block_columns = 10;
 
-	m_block_dx = 5;
-	m_block_dy = 10;
+	//m_block_dx = 5;
+	//m_block_dy = 10;
 
-	m_block_height = 25;
-	m_block_width = 50;
+	//m_block_height = 25;
+	//m_block_width = 50;
 
-	m_block_leftOffset = (m_game_rect_width - (m_block_dx + m_block_width) * m_block_columns + m_block_dx) / 2;
-	m_block_topOffset = 10;
+	//m_block_leftOffset = (m_game_rect_width - (m_block_dx + m_block_width) * m_block_columns + m_block_dx) / 2;
+	//m_block_topOffset = 10;
 
 	m_spacingTime = 0.0f;
+	m_blocks = NULL;
 	m_ball = NULL;
 	m_bottomBlock = NULL;
 	m_moveDir.Zero();
@@ -57,36 +58,50 @@ bool GameClass::Initialize(int screenWidth, int screenHeight, HWND hwnd, HDC hdc
 
 bool GameClass::Frame(HDC hdc, float spacingTime)
 {
-	Vector2 hitBlock;
-	hitBlock.x = -5;
-	m_spacingTime += spacingTime;
-
-	Delete_BottomBlock(hdc);
-	m_bottomBlock->makeMove(m_moveDir);
-	m_moveDir.Zero();
-	Draw_BottomBlock(hdc);
-	
-	if (m_spacingTime > 20.0f)
+	if (m_state == GameState::Game_Run)
 	{
-		CheckHit(hitBlock);
-		if ( -5 != hitBlock.x)
+		Vector2 hitBlock;
+		hitBlock.x = -5;
+		m_spacingTime += spacingTime;
+
+		Delete_BottomBlock(hdc);
+		m_bottomBlock->makeMove(m_moveDir);
+		m_moveDir.Zero();
+		Draw_BottomBlock(hdc);
+
+		if (m_spacingTime > 20.0f)
 		{
-			//char logTmp[20];
-			//sprintf(logTmp, "x = %d, y = %d", hitBlock.x, hitBlock.y);
-			//LOG(logTmp);
+			CheckHit(hitBlock);
+			if ( -5 != hitBlock.x)
+			{
+				//char logTmp[20];
+				//sprintf(logTmp, "x = %d, y = %d", hitBlock.x, hitBlock.y);
+				//LOG(logTmp);
 
-			Draw_Rect(hdc, hitBlock.x  * (m_block_width + m_block_dx) + m_block_leftOffset + m_game_rect_leftOffset, 
-				hitBlock.y * (m_block_height + m_block_dy) + m_block_topOffset + m_game_rect_topOffset, 
-				m_block_width, m_block_height, 1);
+				Draw_Rect(hdc, hitBlock.x  * (m_block_width + m_block_dx) + m_block_leftOffset + m_game_rect_leftOffset, 
+					hitBlock.y * (m_block_height + m_block_dy) + m_block_topOffset + m_game_rect_topOffset, 
+					m_block_width, m_block_height, 1);
+			}
+
+			Delete_Ball(hdc);
+			m_ball->GoForward(5);
+			Draw_Ball(hdc);
+
+			m_spacingTime = 0.0f;
 		}
-
-		Delete_Ball(hdc);
-		m_ball->GoForward(5);
-		Draw_Ball(hdc);
-
-		m_spacingTime = 0.0f;
 	}
+	else if (m_state == GameState::Game_Pass)
+	{
 
+	}
+	else if (m_state == GameState::Game_Over)
+	{
+		 
+	}
+	else if (m_state == GameState::Game_Initialize)
+	{
+		
+	}
 	return true;
 }
 
@@ -175,7 +190,6 @@ void GameClass::Delete_BottomBlock(HDC hdc)
 
 void GameClass::InitiSences(HDC hdc)
 {
-
 	RECT rect;
 	rect.top = m_game_rect_topOffset;
 	rect.bottom = m_game_rect_topOffset + m_game_rect_height;
@@ -185,16 +199,18 @@ void GameClass::InitiSences(HDC hdc)
 	HBRUSH hbrush = CreateSolidBrush(RGB(0,0,0));
 	HBRUSH hbrush2 = CreateSolidBrush(RGB(100,0,0));
 
-	FillRect(hdc, &rect, hbrush);
-	FrameRect(hdc, &rect, hbrush2);
-
-	Init_Block(hdc);
-	Draw_BottomBlock(hdc);	
 	m_blocks = new int*[m_block_rows];
 	for (int i = 0; i < m_block_rows; ++i)
 	{
 		m_blocks[i] = new int[m_block_columns]();
 	}
+
+	FillRect(hdc, &rect, hbrush);
+	FrameRect(hdc, &rect, hbrush2);
+
+	Init_Block(hdc);
+	Draw_Ball(hdc);
+	Draw_BottomBlock(hdc);	
 
 	DeleteObject(hbrush);
 	DeleteObject(hbrush2);
@@ -345,3 +361,4 @@ void GameClass::Init_Block(HDC hdc)
 		}
 	}
 }
+

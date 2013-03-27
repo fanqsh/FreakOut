@@ -121,14 +121,10 @@ bool SystemClass::Frame()
 		return false;
 
 	m_timer->Frame();
-	if (m_game->m_state == GameClass::GameState::Game_Run)
-	{
-		result = m_game->Frame(m_hdc, m_timer->GetTime());
-		if (!result)
-			return false;
-	}
-	else
-		return true;
+
+	result = m_game->Frame(m_hdc, m_timer->GetTime());
+	if (!result)
+		return false;
 
 	return true;
 }
