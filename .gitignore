@@ -26,3 +26,6 @@ Release
 *.tlog
 *.log
 *.opensdf
+
+#############################################
+FreakOutLog.txt
