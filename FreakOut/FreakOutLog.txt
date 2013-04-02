@@ -597,3 +597,14 @@
 2013-4-2 13:34:42 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 8, y = 2 type = Bottom
 2013-4-2 13:34:42 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 8, y = 1 type = Bottom
 2013-4-2 13:34:43 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 9, y = 4 type = Left
+2013-4-2 14:26:3 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 7, y = 4 type = Left
+2013-4-2 14:26:3 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 8, y = 4 type = Right
+2013-4-2 14:26:3 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 7, y = 3 type = Left
+2013-4-2 14:26:3 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 8, y = 3 type = Right
+2013-4-2 14:26:3 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 7, y = 2 type = Left
+2013-4-2 14:26:3 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 8, y = 2 type = Bottom
+2013-4-2 14:26:4 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 8, y = 1 type = Bottom
+2013-4-2 14:26:4 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 9, y = 4 type = Left
+2013-4-2 14:26:5 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 9, y = 3 type = Right
+2013-4-2 14:26:5 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 9, y = 0 type = Right
+2013-4-2 14:26:5 <Info>:gameclass.cpp.615.GameClass::CheckHit() x = 9, y = 2 type = Right
