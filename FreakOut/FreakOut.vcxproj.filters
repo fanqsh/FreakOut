@@ -15,45 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="system.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TimerClass.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="BallClass.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GameClass.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="log.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="BottomBlock.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="system.h">
+    <ClInclude Include="BallClass.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="common.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="TimerClass.h">
+    <ClInclude Include="BottomBlock.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="BrickClass.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="BallClass.h">
+    <ClInclude Include="common.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="GameClass.h">
@@ -62,11 +33,40 @@
     <ClInclude Include="log.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="BottomBlock.h">
+    <ClInclude Include="system.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerClass.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Vector2.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BallClass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BottomBlock.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="log.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="system.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerClass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

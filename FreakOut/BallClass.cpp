@@ -5,6 +5,7 @@ BallClass::BallClass(void)
 	m_ballSize = 5;
 	m_position.Zero();
 	m_speed.Zero();
+    m_speed.setValue(-0.7, -0.7);
 	m_color = RGB(rand()%255, rand()%255, rand()%255);
 }
 
@@ -16,11 +17,16 @@ BallClass::~BallClass(void)
 {
 }
 
-void BallClass::Initialize(int size /* = 5 */, Vector2& position /* = Vector2(0.0f, 0.0f) */, Vector2& speed /* = Vector2(0.0f, 0.0f) */)
+void BallClass::Initialize(int size /* = 5 */, Vector2& position /* = Vector2(0.0f, 0.0f) */, float speedAngle /* = Vector2(0.0f, 0.0f) */)
 {
 	m_ballSize = size;
 	m_position = position;
-	m_speed = speed;
+	m_speed.SetAngle(speedAngle);
+}
+
+void BallClass::SetSpeedDirect(float angle)
+{
+    m_speed.SetAngle(angle);
 }
 
 void BallClass::GetForwardPosition(Vector2& position)
@@ -61,7 +67,7 @@ void BallClass::GoForward(int steps)
 	m_position.y += m_speed.y * steps;
 }
 
-void BallClass::HasHit(EHitType type)
+void BallClass::HasHit(EHitType type, float percentage)
 {
 	switch (type)
 	{
@@ -80,4 +86,7 @@ void BallClass::HasHit(EHitType type)
 	default:
 		break;
 	}
+
+	if (percentage < 1.0 && percentage > -1.0)
+		m_speed.SetAngle(PI/2 - percentage * PI/3);
 }

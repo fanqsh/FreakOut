@@ -24,6 +24,7 @@ bool TimerClass::Initialize()
 	m_ticksPerMs = (float)(m_frequency / 1000);
 
 	QueryPerformanceCounter((LARGE_INTEGER*)&m_startTime);
+	return true;
 }
 
 //每个渲染帧都调用，从而计算出每帧之间的时间

@@ -13,7 +13,7 @@ public:
 	bool Initilaize(Vector2& position, Vector2& size);
 
 	void makeMove(Vector2&);	//∫·œÚ“∆∂Ø
-	bool CheckHit(Vector2& position, Vector2& speed, int ballSize = 0);
+	bool CheckHit(Vector2& position, Vector2& speed, float& persentage, int ballSize = 0);
 
 	Vector2 GetPosition(Vector2& position);
 	Vector2 GetSize(Vector2& size);

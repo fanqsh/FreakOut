@@ -21,7 +21,7 @@ public:
 	BallClass(const BallClass&);
 	~BallClass(void);
 	
-	void Initialize(int size = 5, Vector2& position = Vector2(0.0f, 0.0f), Vector2& speed = Vector2(0.0f, 0.0f));
+	void Initialize(int size = 5, Vector2& position = Vector2(0.0f, 0.0f), float speedAngle = -0.536);
 
 	Vector2 GetPosition(Vector2& position);
 	void GetForwardPosition(Vector2& position);
@@ -30,11 +30,11 @@ public:
 	void SetPosition(Vector2& position);
 	void AddHitPosition(Vector2& hitPosition);
 	void ResetHitPosition();
-
 	void GoForward(int steps);
+    void SetSpeedDirect(float angle);       //设置方向
 
 	//进行碰撞
-	void HasHit(EHitType type);
+	void HasHit(EHitType type, float persentage = 10.0f);
 	int m_ballSize;
 	Vector2 m_speed;
 private:

@@ -2,7 +2,7 @@
 
 void Logger::Log(const char* fileName, const char* func, const int line, string info)
 {
-	ofstream fout;
+	std::ofstream fout;
 	char time[15];
 	char date[15];
 	

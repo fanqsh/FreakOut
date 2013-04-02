@@ -4,7 +4,6 @@
 #include <fstream>
 #include <string>
 #include "TimerClass.h"
-
 using namespace std;
 
 #ifdef _DEBUG

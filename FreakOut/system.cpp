@@ -24,9 +24,14 @@ SystemClass::~SystemClass(void)
 bool SystemClass::Initialize()
 {
 	int screenWidth = 0, screenHeight = 0;
+	PAINTSTRUCT ps;        // 指向图形环境的句柄 WM_PAINT事件中使用
 	bool result = false;
 	//初始化窗口
 	InitializeWindows(screenWidth, screenHeight);
+	
+	//BeginPaint 获取HDC句柄
+	ApplicationHandle->m_hdc = BeginPaint(m_hwnd,&ps);     //BeginPaint hdc仅代表了窗口被破坏的区域 并不能操作整个屏幕
+	EndPaint(m_hwnd,&ps);
 
 	//创建计时器并初始化
 	m_timer = new TimerClass;
@@ -115,7 +120,6 @@ void SystemClass::Run()
 bool SystemClass::Frame()
 {
 	bool result = false;
-
 
 	if (bexit)
 		return false;
@@ -214,14 +218,33 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umessage, WPARAM wp
 		if (wparam == VK_ESCAPE)
 			bexit = true;
 		if (wparam == VK_LEFT)
-			m_game->m_moveDir.x -= 8;
+		{
+			m_game->m_moveDir.x = -4;
+		}
 		if (wparam == VK_RIGHT)
-			m_game->m_moveDir.x += 8;
+		{
+			m_game->m_moveDir.x = 4;
+		}
 		if (wparam == VK_SPACE)
-			m_game->m_state = GameClass::GameState::Game_Run;
+		{
+			if (m_game->m_state == GameClass::GameState::Game_Initialize)
+				m_game->m_state = GameClass::GameState::Game_Run;
+			else if (m_game->m_state == GameClass::GameState::Game_Over)
+				m_game->m_state = GameClass::GameState::Game_Initialize;
+			else if (m_game->m_state == GameClass::GameState::Game_Run)
+				m_game->m_state = GameClass::GameState::Game_Pause;
+			else if (m_game->m_state == GameClass::GameState::Game_Pause)
+				m_game->m_state = GameClass::GameState::Game_Run;
+			else if (m_game->m_state == GameClass::GameState::Game_Pass)
+				m_game->m_state = GameClass::GameState::Game_Run;
+		}
 		return 0;
 
 	case WM_KEYUP:
+		if (wparam == VK_LEFT && m_game->m_moveDir.x < 0)
+			m_game->m_moveDir.x = 0;
+		if (wparam == VK_RIGHT && m_game->m_moveDir.x > 0)
+			m_game->m_moveDir.x = 0;
 			return 0;
 	case WM_SIZE:
 			return 0;
@@ -257,8 +280,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 		{
 			//BeginPaint测试 这个只获得被破坏的范围 不能获得整个窗口
 			ApplicationHandle->m_hdc = BeginPaint(hwnd,&ps);     //BeginPaint hdc仅代表了窗口被破坏的区域 并不能操作整个屏幕
-			// 在此做你自己的绘制 
-			ApplicationHandle->m_game->InitiSences(ApplicationHandle->m_hdc);
+			// 在此做你自己的绘制
 
 			EndPaint(hwnd,&ps);
 
