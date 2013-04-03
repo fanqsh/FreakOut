@@ -42,6 +42,9 @@
     <ClInclude Include="Vector2.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="PictureClass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vector2.cpp">
@@ -68,5 +71,21 @@
     <ClCompile Include="TimerClass.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="PictureClass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="block.png">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="block.jpg">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="block2.jpg">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

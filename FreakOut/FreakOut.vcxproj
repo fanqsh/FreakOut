@@ -80,6 +80,7 @@
     <ClInclude Include="common.h" />
     <ClInclude Include="GameClass.h" />
     <ClInclude Include="log.h" />
+    <ClInclude Include="PictureClass.h" />
     <ClInclude Include="system.h" />
     <ClInclude Include="TimerClass.h" />
     <ClInclude Include="Vector2.h" />
@@ -90,9 +91,17 @@
     <ClCompile Include="GameClass.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PictureClass.cpp" />
     <ClCompile Include="system.cpp" />
     <ClCompile Include="TimerClass.cpp" />
     <ClCompile Include="Vector2.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="block.jpg" />
+    <None Include="block2.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

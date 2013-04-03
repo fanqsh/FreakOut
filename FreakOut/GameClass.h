@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include "BallClass.h"
 #include "BottomBlock.h"
+#include "PictureClass.h"
 #include "log.h"
 
 class GameClass
@@ -122,6 +123,25 @@ private:
 	int** m_blocks;
 	HDC m_hdc;
 
+	#pragma region 笔刷
+
+	HBRUSH m_backcolorBursh;	//背景色
+
+	#pragma endregion
+
+	#pragma region 状态参数
+	#pragma endregion
+
+	#pragma region 图片对象
+
+	CPicture* m_ballPicture;
+	CPicture* m_blockPicture;
+	CPicture* m_bottomBlockPicture;
+
+	#pragma endregion
+
+
+	#pragma region 状态参数
 	bool m_isPlayed;	//已经不是初始界面
 	bool m_isPaused;	//上一个状态为暂停
 	bool m_isPass;	//上个状态为过关
@@ -129,6 +149,7 @@ private:
 	bool m_isOver;	//上个状态为结束游戏
     int m_blockLast;
     int m_ballSpeed;
+	#pragma endregion
 
 	#pragma endregion
 

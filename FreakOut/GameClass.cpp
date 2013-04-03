@@ -29,6 +29,11 @@ GameClass::GameClass()
 	m_blocks = NULL;
 	m_ball = NULL;
 	m_bottomBlock = NULL;
+
+	m_blockPicture = NULL;
+	m_ballPicture = NULL;
+	m_bottomBlockPicture = NULL;
+
 	m_moveDir.Zero();
 	m_currentMoveDir.Zero();
 	m_state = GameState::Game_Initialize;
@@ -37,6 +42,8 @@ GameClass::GameClass()
 	m_currentLevel = 1;
     m_ballSpeed = 8;    
 	m_blockLast = m_block_rows * m_block_columns;
+
+	m_backcolorBursh = CreateSolidBrush(RGB(255, 255, 255));
 }
 
 GameClass::GameClass(const GameClass&)
@@ -66,6 +73,19 @@ bool GameClass::Initialize(int screenWidth, int screenHeight, HWND hwnd, HDC hdc
 	vec2.setValue(100, 15);
 	vec.setValue(vec.x - (vec2.x - m_ball->m_ballSize)/2, vec.y + m_ball->m_ballSize);
 	m_bottomBlock->Initilaize(vec, vec2);
+
+	m_blockPicture = new CPicture;
+	if (!m_blockPicture)
+		return false;
+	m_blockPicture->Load(_T("D:\\project\\FreakOut\\FreakOut\\FreakOut\\block2.jpg"));
+	m_ballPicture = new CPicture;
+	if (!m_ballPicture)
+		return false;
+	m_ballPicture->Load(_T("D:\\project\\FreakOut\\FreakOut\\FreakOut\\block2.jpg"));
+	m_bottomBlockPicture = new CPicture;
+	if (!m_bottomBlockPicture)
+		return false;
+	m_bottomBlockPicture->Load(_T("D:\\project\\FreakOut\\FreakOut\\FreakOut\\block2.jpg"));
 
 	return true;
 }
@@ -157,8 +177,7 @@ bool GameClass::Frame(HDC hdc, float spacingTime)
 			return true;
 
 		m_isPaused = true;
-		//Draw_PauseInfo(hdc);
-		Draw_PassInfo(hdc);
+		Draw_PauseInfo(hdc);
 		return true;
 	}
 	else if (m_state == GameState::Game_Pass)
@@ -169,6 +188,7 @@ bool GameClass::Frame(HDC hdc, float spacingTime)
         m_isPass = true;
 		++m_currentLevel;
         ++m_ballSpeed;
+		Draw_PassInfo(hdc);
 	}
 	else if (m_state == GameState::Game_Over)
 	{
@@ -229,9 +249,7 @@ void GameClass::Draw_Rect(HDC hdc, int verticalOffset , int horizontalOffset, in
 	}
 	else
 	{
-		HBRUSH hbrush2 = CreateSolidBrush(RGB(0, 0, 0));
-		FillRect(hdc, &rect, hbrush2);
-		DeleteObject(hbrush2);
+		FillRect(hdc, &rect, m_backcolorBursh);
 	}
 }
 
@@ -258,7 +276,14 @@ void GameClass::Draw_Ball(HDC hdc)
 {
 	Vector2 vec;
 	m_ball->GetPosition(vec);
-	Ellipse(hdc, vec.x, vec.y, vec.x + m_ball->m_ballSize, vec.y + m_ball->m_ballSize);
+	//Ellipse(hdc, vec.x, vec.y, vec.x + m_ball->m_ballSize, vec.y + m_ball->m_ballSize);
+	RECT rec;
+	rec.top = vec.y;
+	rec.left = vec.x;
+	rec.bottom = vec.y + m_ball->m_ballSize;
+	rec.right = vec.x + m_ball->m_ballSize;
+
+	m_ballPicture->Render(hdc, &rec);
 }
 
 void GameClass::Delete_Ball(HDC hdc)
@@ -270,11 +295,8 @@ void GameClass::Delete_Ball(HDC hdc)
 	rect.bottom = vec.y + m_ball->m_ballSize;
 	rect.left = vec.x;
 	rect.right = vec.x + m_ball->m_ballSize;
-	HBRUSH hbrush = CreateSolidBrush(RGB(0,0,0));
 
-	FillRect(hdc, &rect, hbrush);
-
-	DeleteObject(hbrush);
+	FillRect(hdc, &rect, m_backcolorBursh);
 }
 
 #pragma endregion
@@ -311,10 +333,18 @@ void GameClass::Init_Block(HDC hdc)
 	{
 		for (int j = 0; j < m_block_rows; ++j)
 		{
-			Draw_Rect(hdc, 
-				i * ( m_block_width + m_block_dx ) + m_block_leftOffset + m_game_rect_leftOffset, 
-				j * ( m_block_height + m_block_dy ) + m_block_topOffset + m_game_rect_topOffset ,
-				m_block_width, m_block_height);
+			//Draw_Rect(hdc, 
+			//	i * ( m_block_width + m_block_dx ) + m_block_leftOffset + m_game_rect_leftOffset, 
+			//	j * ( m_block_height + m_block_dy ) + m_block_topOffset + m_game_rect_topOffset ,
+			//	m_block_width, m_block_height);
+
+			RECT rec;
+			rec.top = j * (m_block_height + m_block_dy) + m_block_topOffset + m_game_rect_topOffset;
+			rec.left = i * (m_block_width + m_block_dx) + m_block_leftOffset + m_game_rect_leftOffset;
+			rec.bottom = rec.top + m_block_height;
+			rec.right = rec.left + m_block_width;
+			m_blockPicture->Render(hdc, &rec);
+
 		}
 	}
 }
@@ -328,10 +358,17 @@ void GameClass::Draw_Block(HDC hdc)
 		{
 			if (m_blocks[i][j] == 0)
             {
-				Draw_Rect(hdc,
-				j * ( m_block_width + m_block_dx ) + m_block_leftOffset + m_game_rect_leftOffset, 
-				i * ( m_block_height + m_block_dy ) + m_block_topOffset + m_game_rect_topOffset ,
-				m_block_width, m_block_height);
+				//Draw_Rect(hdc,
+				//j * ( m_block_width + m_block_dx ) + m_block_leftOffset + m_game_rect_leftOffset, 
+				//i * ( m_block_height + m_block_dy ) + m_block_topOffset + m_game_rect_topOffset ,
+				//m_block_width, m_block_height);
+				RECT rec;
+				rec.top = i * (m_block_height + m_block_dy) + m_block_topOffset + m_game_rect_topOffset;
+				rec.left = j * (m_block_width + m_block_dx) + m_block_leftOffset + m_game_rect_leftOffset;
+				rec.bottom = rec.top + m_block_height;
+				rec.right = rec.left + m_block_width;
+				m_blockPicture->Render(hdc, &rec);
+
                 ++blockLast;
             }
 			else if (m_blocks[i][j] == 1)
@@ -385,10 +422,7 @@ void GameClass::Delete_BottomBlock(HDC hdc)
 	rect.bottom = position.y + size.y;
 	rect.right = position.x + size.x;
 
-	HBRUSH hbrush = CreateSolidBrush(RGB(0, 0, 0));
-
-	FillRect(hdc, &rect, hbrush);
-	DeleteObject(hbrush);
+	FillRect(hdc, &rect, m_backcolorBursh);
 }
 
 #pragma endregion
@@ -459,7 +493,7 @@ void GameClass::Draw_PassInfo(HDC hdc)
 	SetBkMode(hdc, TRANSPARENT);
 	//设置颜色并输出文字
 	clr = SetTextColor(hdc, RGB(255, 0, 0));
-	TextOut(hdc, m_game_rect_width/2 + m_game_rect_leftOffset - 15, (m_game_rect_height - height)/2 + m_game_rect_topOffset + 20, szBuffer, lstrlen(szBuffer));
+	TextOut(hdc, m_game_rect_width/2 + m_game_rect_leftOffset - 19, (m_game_rect_height - height)/2 + m_game_rect_topOffset + 20, szBuffer, lstrlen(szBuffer));
 
 	TextOut(hdc, m_game_rect_width/2 + m_game_rect_leftOffset - 45, (m_game_rect_height - height)/2 + m_game_rect_topOffset + 50, szLevelInfo, lstrlen(szLevelInfo));
 	TextOut(hdc, m_game_rect_width/2 + m_game_rect_leftOffset + 33, (m_game_rect_height - height)/2 + m_game_rect_topOffset + 50, szLevel, lstrlen(szLevel));
@@ -467,7 +501,7 @@ void GameClass::Draw_PassInfo(HDC hdc)
 	TextOut(hdc, m_game_rect_width/2 + m_game_rect_leftOffset - 55, (m_game_rect_height - height)/2 + m_game_rect_topOffset + 80, szLifeInfo, lstrlen(szLifeInfo));
 	TextOut(hdc, m_game_rect_width/2 + m_game_rect_leftOffset + 43, (m_game_rect_height - height)/2 + m_game_rect_topOffset + 80, szLifeNum, lstrlen(szLifeNum));
 
-	TextOut(hdc, m_game_rect_width/2 + m_game_rect_leftOffset - 45, (m_game_rect_height - height)/2 + m_game_rect_topOffset + 110, szBufferMsg, lstrlen(szBufferMsg));
+	TextOut(hdc, m_game_rect_width/2 + m_game_rect_leftOffset - 68, (m_game_rect_height - height)/2 + m_game_rect_topOffset + 110, szBufferMsg, lstrlen(szBufferMsg));
 	//还原颜色
 	SetTextColor(hdc, clr);
 	
@@ -709,17 +743,21 @@ void GameClass::InitiSences(HDC hdc)
 	Vector2 vec(400, 580);
 	Vector2 vec2(-1, -1);
 
-	rect.top = m_game_rect_topOffset;
-	rect.bottom = m_game_rect_topOffset + m_game_rect_height;
-	rect.left = m_game_rect_leftOffset;
-	rect.right = m_game_rect_leftOffset + m_game_rect_width;
 
-	HBRUSH hbrush = CreateSolidBrush(RGB(0,0,0));
 	HBRUSH hbrush2 = CreateSolidBrush(RGB(100,0,0));
 
     m_ballSpeed = 15;
 
-	FillRect(hdc, &rect, hbrush);
+	rect.top = 0;
+	rect.bottom = 2000;
+	rect.left = 0;
+	rect.right = 2500;
+	FillRect(hdc, &rect, m_backcolorBursh);
+
+	rect.top = m_game_rect_topOffset;
+	rect.bottom = m_game_rect_topOffset + m_game_rect_height;
+	rect.left = m_game_rect_leftOffset;
+	rect.right = m_game_rect_leftOffset + m_game_rect_width;
 	FrameRect(hdc, &rect, hbrush2);
 	Init_Block(hdc);
 
@@ -731,7 +769,6 @@ void GameClass::InitiSences(HDC hdc)
 	Draw_Ball(hdc);
 	Draw_BottomBlock(hdc);
 
-	DeleteObject(hbrush);
 	DeleteObject(hbrush2);
 
 	m_isPlayed = false;
@@ -740,39 +777,44 @@ void GameClass::InitiSences(HDC hdc)
 void GameClass::RebuildSences(HDC hdc)
 {
 	RECT rect;
+
+	HBRUSH hbrush2 = CreateSolidBrush(RGB(100,0,0));
+
+	rect.top = 0;
+	rect.bottom = 2000;
+	rect.left = 0;
+	rect.right = 2500;
+	FillRect(hdc, &rect, m_backcolorBursh);
+
 	rect.top = m_game_rect_topOffset;
 	rect.bottom = m_game_rect_topOffset + m_game_rect_height;
 	rect.left = m_game_rect_leftOffset;
 	rect.right = m_game_rect_leftOffset + m_game_rect_width;
-
-	HBRUSH hbrush = CreateSolidBrush(RGB(0,0,0));
-	HBRUSH hbrush2 = CreateSolidBrush(RGB(100,0,0));
-
-	FillRect(hdc, &rect, hbrush);
 	FrameRect(hdc, &rect, hbrush2);
-	Draw_Block(hdc);
 
+	Draw_Block(hdc);
 	Draw_Ball(hdc);
 
 	Draw_BottomBlock(hdc);
 
-	DeleteObject(hbrush);
 	DeleteObject(hbrush2);
 }
 
 void GameClass::ResetGame(HDC hdc)
 {
 	RECT rect;
+	HBRUSH hbrush2 = CreateSolidBrush(RGB(100,0,0));
+
+	rect.top = 0;
+	rect.bottom = 2000;
+	rect.left = 0;
+	rect.right = 2500;
+	FillRect(hdc, &rect, m_backcolorBursh);
 
 	rect.top = m_game_rect_topOffset;
 	rect.bottom = m_game_rect_topOffset + m_game_rect_height;
 	rect.left = m_game_rect_leftOffset;
 	rect.right = m_game_rect_leftOffset + m_game_rect_width;
-
-	HBRUSH hbrush = CreateSolidBrush(RGB(0,0,0));
-	HBRUSH hbrush2 = CreateSolidBrush(RGB(100,0,0));
-
-	FillRect(hdc, &rect, hbrush);
 	FrameRect(hdc, &rect, hbrush2);
 	Draw_Block(hdc);
 
@@ -787,7 +829,6 @@ void GameClass::ResetGame(HDC hdc)
 	Draw_Ball(hdc);
 	Draw_BottomBlock(hdc);
 
-	DeleteObject(hbrush);
 	DeleteObject(hbrush2);
 }
 
